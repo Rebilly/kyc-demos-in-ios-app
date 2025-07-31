@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+    <title>KYC selfie - camera</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+</head>
+<body>
+Take a selfie requires a camera, and the camera permission is granted.
+<br>Note: on the desktop, there is only one camera. on the mobile, only the front camera can be used.
+<div id="app">
+    <ul>
+        <li>is camera available? {{ isCameraAvailable }}</li>
+        <li>is camera permission denied? {{ isPermissionDenied }}</li>
+    </ul>
+    <video
+            ref="video"
+            style="width: 100%;border: 1px solid black;"
+            playsinline
+    ></video>
+</div>
+
+<script>
+    const {createApp, unref, ref, onMounted} = Vue;
+
+
+    createApp({
+        setup() {
+            function getUserMedia() {
+                if (navigator.mediaDevices?.getUserMedia) {
+                    return navigator.mediaDevices.getUserMedia.bind(navigator.mediaDevices);
+                }
+                const userMedia =
+                    navigator.getUserMedia ||
+                    navigator.webkitGetUserMedia ||
+                    navigator.mozGetUserMedia;
+                if (userMedia) {
+                    return (constraints) => {
+                        return new Promise((resolve, reject) =>
+                            userMedia.call(navigator, constraints, resolve, reject)
+                        );
+                    };
+                }
+                return false;
+            }
+
+            async function loadVideo() {
+                const userMedia = getUserMedia();
+                const stream = await userMedia({video: true});
+                const videoElement = unref(video.value);
+                if ('srcObject' in videoElement) {
+                    videoElement.srcObject = stream;
+                } else {
+                    videoElement.src = window.URL.createObjectURL(stream);
+                }
+                videoElement.onloadedmetadata = videoElement.play();
+            }
+
+            const video = ref();
+            const isCameraAvailable = ref(getUserMedia() !== false);
+            const isPermissionDenied = ref(false);
+
+            onMounted(async function () {
+                try {
+                    await loadVideo();
+                } catch (error) {
+                    console.error(error);
+                    let errorMessage = null;
+                    let errorName = null;
+                    if (error instanceof Error || error instanceof DOMException) {
+                        errorMessage = error.message;
+                        errorName = error.name;
+                    } else {
+                        errorMessage = String(error);
+                    }
+                    isCameraAvailable.value = false;
+                    if (errorMessage?.includes('Permission denied') || errorName === 'NotAllowedError') {
+                        isPermissionDenied.value = true;
+                    }
+                }
+            });
+
+            return {
+                isCameraAvailable,
+                isPermissionDenied,
+                video,
+                loadVideo,
+            };
+        },
+    }).mount('#app');
+</script>
+</body>
+</html>

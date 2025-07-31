@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+    <title>KYC selfie - face liveness</title>
+</head>
+<body>
+The face liveness UI is developed by AWS, see it's <a
+        href="https://github.com/aws-samples/amazon-rekognition-face-liveness-demo">official demo</a>. KYC integrates it
+in an iframe, we can only <a href="https://ui.docs.amplify.aws/react/connected-components/liveness">customize a bit</a>.
+<br>
+So I ran the official demo, deployed it on Amplify: <a href="https://main.d2m1suc7miy4d9.amplifyapp.com/">https://main.d2m1suc7miy4d9.amplifyapp.com/</a>.
+KYC hosts it via an iframe.
+<br>Note: on the desktop, there is only one camera. on the mobile, only the front camera can be used.
+<iframe allow="camera;" src="https://main.d2m1suc7miy4d9.amplifyapp.com/"
+        style="border: 1px solid blue; width: 100%;height: 500px;"></iframe>
+</body>
+</html>
+
+

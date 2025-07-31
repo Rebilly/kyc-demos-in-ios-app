@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+    <title>KYC file upload</title>
+</head>
+<body>
+<p>
+    We use a native input[type="file"] component to upload a file, and it can also take a picture without requesting your
+    camera permission on mobile.
+    <br>
+    So the behavior of the input[type="file"] is quite different between mobile and desktop. Try opening this page on both mobile and desktop to see the difference.
+</p>
+<input
+        type="file"
+        accept="image/png,image/jpeg,image/gif,application/pdf"
+/>
+<br>
+<br>
+You'll find:
+<ul>
+    <li>It can only upload a file on desktop</li>
+    <li>It can upload a file on mobile and also take a photo, whether it's the front or rear camera</li>
+    <li>Interactive logic is different, UI is different</li>
+</ul>
+<p>So if a selfie(both face detection or face liveness) is not required on the mobile, the native input component is
+    enough.
+</p>
+</body>
+</html>
